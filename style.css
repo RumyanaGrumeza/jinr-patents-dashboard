@@ -7,16 +7,16 @@ body {
 /* Заголовок: Курсив с Merriweather (serif, italic) */
 .main-title {
     font-family: 'Merriweather', serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 2.2rem;
-    letter-spacing: 0.5px;
+    font-style: italic; /* Курсив */
+    font-weight: 400; /* Нормальная толщина (не жирный) */
+    font-size: 2.2rem; /* Немного больше для акцента */
+    letter-spacing: 0.5px; /* Лёгкий разряд для элегантности */
 }
 
 /* Подзаголовок в header: Остаётся Roboto, но жирнее */
 header p {
     font-family: 'Roboto', sans-serif;
-    font-weight: 300;
+    font-weight: 300; /* Лёгкий */
     font-size: 1.1rem;
 }
 
@@ -43,7 +43,22 @@ header p {
     height: 100%; /* Заполняет .card */
 }
 
-/* Flex для равной высоты карточек в row (графики 3 и 4) */
+/* Исправления для высоты графиков (вернули как раньше) */
+.card-body canvas {
+    min-height: 300px;
+    max-height: 400px;
+    height: 300px !important;
+    width: 100% !important;
+}
+
+/* Специфическая высота для IPC диаграммы (увеличена для легенды) */
+#ipcChart {
+    height: 500px !important;
+    min-height: 550px;
+    max-height: 600px;
+}
+
+/* Flex для равной высоты карточек в row (графики 1-2 и 3-4) */
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -59,96 +74,98 @@ header p {
     width: 100%; /* Полная ширина колонки */
 }
 
-canvas {
-    max-height: 400px; /* Общий лимит для всех canvas, но responsive */
-    width: 100% !important; /* Полная ширина */
-    height: auto !important; /* Автоматическая высота */
-}
-
 #dataTable table {
     font-size: 0.9em;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif; /* Таблица тоже Roboto */
+    width: 100%; /* Полная ширина */
 }
 #dataTable th, #dataTable td {
-    padding: 8px;
+    padding: 10px 8px; /* Увеличен padding для длинных текстов */
     text-align: left;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: top; /* Вертикальное выравнивание сверху */
+}
+#dataTable th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    position: sticky;
+    top: 0; /* Sticky header для скролла */
+    z-index: 10;
 }
 #dataTable tr:nth-child(even) {
     background-color: #f2f2f2;
 }
-
-/* Стили для эмблемы ОИЯИ */
-.logo-img {
-    max-height: 80px;
-    max-width: 150px;
-    height: auto;
-    width: auto;
-    margin-right: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+#dataTable tr:hover {
+    background-color: #e9ecef; /* Hover для интерактива */
 }
 
-/* Responsive: На мобильных логотип меньше */
+/* Полные названия и авторы (перенос строк, без обрезки) */
+#dataTable td:nth-child(2) { /* Название (вторая колонка) */
+    word-break: break-word;
+    white-space: normal;
+    max-width: none; /* Полная ширина, перенос */
+    width: 25%; /* Шире для длинных названий */
+}
+#dataTable td:nth-child(3) { /* Авторы (третья колонка) */
+    word-break: break-word;
+    white-space: normal;
+    max-width: none;
+    width: 20%; /* Шире для списков авторов */
+}
+#dataTable td:nth-child(4) { /* МПК */
+    width: 10%;
+    font-family: monospace; /* Моноширинный для кодов */
+}
+#dataTable td:nth-child(5) { /* Направление */
+    width: 15%;
+    word-break: break-word;
+    white-space: normal;
+}
+#dataTable td:nth-child(8) { /* Ссылка */
+    width: 8%;
+    text-align: center;
+}
+#dataTable a {
+    color: #007bff;
+    text-decoration: none;
+}
+#dataTable a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive для таблицы данных (на мобильных: меньший шрифт, скролл) */
 @media (max-width: 768px) {
-    .logo-img {
-        max-height: 60px;
-        max-width: 120px;
-        margin-right: 0;
-        margin-bottom: 10px;
+    #dataTable table {
+        font-size: 0.8em;
     }
-    canvas {
-        max-height: 300px !important; /* Меньше на мобильных */
+    #dataTable th, #dataTable td {
+        padding: 6px 4px;
     }
-
-    .row.align-items-center {
-        flex-direction: column;
-        text-align: center;
-    }
-    .logo-img {
-        margin-bottom: 10px;
-        margin-right: 0;
-    }
-
-    .main-title {
-        font-size: 1.8rem;
-        text-align: left;
-    }
-    header p {
-        text-align: left;
-    }
-
-    /* На мобильных: Колонки stack, равная высота не нужна */
-    .row {
-        align-items: flex-start; /* Верхнее выравнивание */
-    }
-
-    .col-md-6 {
-        display: block; /* Block на мобильных */
-    }
-
-    .card {
-        height: auto; /* Автоматическая высота на мобильных */
-    }
-
-    .card-body {
-        height: auto; /* Нет растяжки */
+    #dataTable td:nth-child(2), #dataTable td:nth-child(3) {
+        font-size: 0.75em; /* Меньше для длинных текстов */
+        width: auto; /* Авто на мобильных */
     }
 }
 
-/* Стили для таблицы направлений (аналогично dataTable) */
+/* Стили для таблицы направлений (новые, полные названия, полная ширина) */
 #directionsTable table {
     font-size: 0.9em;
     font-family: 'Roboto', sans-serif;
-    width: 100%;
+    width: 100%; /* Полная ширина контейнера */
 }
 #directionsTable th, #directionsTable td {
-    padding: 8px;
+    padding: 12px 8px; /* Больше padding для читаемости */
     text-align: left;
     border-bottom: 1px solid #dee2e6;
 }
 #directionsTable th {
     background-color: #f8f9fa;
     font-weight: 500;
+    width: 70%; /* Название направления шире */
+}
+#directionsTable th:last-child {
+    width: 30%; /* Количество уже */
+    text-align: center;
 }
 #directionsTable tr:nth-child(even) {
     background-color: #f2f2f2;
@@ -157,93 +174,144 @@ canvas {
     background-color: #e9ecef; /* Hover для интерактива */
 }
 
-/* Улучшение для таблицы направлений: Перенос длинных строк */
+/* Полные названия направлений (перенос строк) */
 #directionsTable td:first-child {
-    word-wrap: break-word; /* Перенос слов */
-    max-width: 300px; /* Ограничение ширины столбца (адаптируйте) */
+    word-break: break-word; /* Перенос слов */
     white-space: normal; /* Разрешает перенос */
+    max-width: none; /* Полная ширина, без ограничения */
+}
+#directionsTable td:last-child {
+    font-weight: 600; /* Жирнее для количества */
+    text-align: center;
 }
 
-/* На мобильных: Ещё компактнее */
+/* Responsive для таблицы направлений (на мобильных: меньший шрифт, stack) */
 @media (max-width: 768px) {
+    #directionsTable table {
+        font-size: 0.8em;
+    }
+    #directionsTable th, #directionsTable td {
+        padding: 6px 4px;
+    }
     #directionsTable td:first-child {
-        max-width: 200px;
-        font-size: 0.8em; /* Меньший шрифт для длинных текстов */
+        font-size: 0.85em; /* Меньше для длинных текстов */
     }
 }
 
-/* Специфические стили для карточки МПК (график 4): Диаграмма + легенда на весь контейнер */
-.card:has(#ipcChart) .card-body {
-    padding: 0.5rem; /* Минимальный padding (убрали 1rem, чтобы больше места) */
-    gap: 0.5rem; /* Небольшой зазор между canvas и легендой */
+/* Стили для эмблемы ОИЯИ (уменьшил margin-right для близости к тексту) */
+.logo-img {
+    max-height: 80px;
+    max-width: 150px;
+    height: auto;
+    width: auto;
+    margin-right: 15px; /* Было 20px — теперь ближе (15px) */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Canvas для pie-chart: Занимает место сверху, круглый */
-#ipcChart {
-    position: relative;
-    width: 100% !important;
-    height: auto !important; /* Автоматическая высота */
-    aspect-ratio: 1 / 1; /* Круглый, но responsive (не фиксированный размер) */
-    flex-shrink: 0; /* Не сжимается — фиксированное место сверху */
-    margin-bottom: 0; /* Нет отступа — легенда сразу под ним */
+/* Sticky-поиск: Закреплён сверху при скролле */
+.sticky-search {
+    position: sticky;
+    top: 0; /* Отступ от верха (учитывая header) */
+    z-index: 1000; /* Выше всего контента */
+    background-color: white; /* Белый фон, чтобы не просвечивал */
+    padding: 15px 0; /* Отступы сверху/снизу */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Лёгкая тень для обособленности */
+    margin-bottom: 20px; /* Отступ снизу после закрепления */
 }
 
-/* Легенда Chart.js: Занимает остаток контейнера снизу, каждое пояснение на новой строке */
-#ipcChart ~ div ul { /* <ul> для легенды */
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Нет отступов — примыкает к canvas */
-    flex: 1; /* Растягивается на всё оставшееся место в .card-body */
-    overflow-y: auto; /* Скролл только если легенда > высоты (редко, но на всякий) */
-    font-size: 0.8em; /* Компактный шрифт */
-    line-height: 1.3; /* Строки ближе, но читаемо */
-    display: block; /* Блочный для полного заполнения */
-    max-height: none; /* Нет лимита — занимает весь остаток */
+/* Стили для фильтров */
+.filters-row {
+    margin-bottom: 1rem;
 }
 
-#ipcChart ~ div ul li {
-    display: block; /* Каждое li — отдельный блок на новой строке */
-    padding: 2px 0; /* Минимальный вертикальный отступ */
-    margin: 0; /* Нет горизонтальных отступов */
-    white-space: pre-wrap; /* Перенос строк с сохранением форматирования (каждое пояснение на новой строке) */
-    word-wrap: break-word; /* Длинные слова переносятся */
-    text-align: left; /* Левое выравнивание */
-    cursor: pointer; /* Hover-эффект Chart.js */
-    border-bottom: 1px solid #f0f0f0; /* Тонкий разделитель между пунктами */
-    width: 100%; /* Полная ширина для заполнения */
+.filter-section {
+    padding: 0 10px;
 }
 
-#ipcChart ~ div ul li:hover {
-    background-color: #f8f9fa; /* Лёгкий hover */
+.filter-section h6 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
 }
 
-/* Tooltip Chart.js: Полные подписи при hover */
-#ipcChart .chartjs-tooltip {
+.filter-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.filter-container .form-check {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.filter-container .form-check-input {
+    margin-right: 8px;
+}
+
+.filter-container .form-check-label {
     font-size: 0.9em;
-    white-space: pre-wrap; /* Перенос в tooltip */
-    max-width: 100%; /* Полная ширина, без обрезки */
+    cursor: pointer;
 }
 
-/* На мобильных: Полное заполнение без сжатия */
+/* Responsive для фильтров (на мобильных: stack, меньший max-height) */
 @media (max-width: 768px) {
-    .card:has(#ipcChart) .card-body {
-        padding: 0.25rem; /* Ещё меньше padding на мобильных */
-        gap: 0.25rem;
+    .logo-img {
+        max-height: 60px;
+        max-width: 120px;
+        margin-right: 0; /* На мобильных отступ 0, текст под логотипом */
+        margin-bottom: 10px; /* Отступ снизу */
     }
 
+    /* Canvas на мобильных: Меньшая высота */
+    .card-body canvas {
+        min-height: 250px;
+        height: 250px !important;
+        max-height: 300px !important;
+    }
+
+    /* Специфическая высота для IPC на мобильных (пропорционально уменьшена) */
     #ipcChart {
-        aspect-ratio: 1 / 1; /* Круглый */
-        max-width: 100%;
+        height: 400px !important;
+        min-height: 350px;
+        max-height: 450px;
     }
 
-    #ipcChart ~ div ul {
-        font-size: 0.75em;
-        line-height: 1.2;
-        overflow-y: visible; /* Нет скролла на мобильных — перенос */
+    /* Sticky-поиск на мобильных: Меньший padding */
+    .sticky-search {
+        padding: 10px 0;
+        margin-bottom: 15px;
     }
 
-    #ipcChart ~ div ul li {
-        padding: 1px 0;
-        white-space: normal; /* Простой перенос */
+    /* Фильтры на мобильных: Полная ширина, меньший скролл */
+    .filter-section {
+        padding: 0;
+        margin-bottom: 1rem;
     }
-}
+
+    .filter-container {
+        max-height: 150px;
+        font-size: 0.85em;
+    }
+
+    .filter-container .form-check {
+        margin-bottom: 6px;
+    }
+
+    /* На мобильных: Логотип сверху, текст слева/центр */
+    .row.align-items-center {
+        flex-direction: column;
+        text-align: center; /* Центр для мобильных, но заголовки слева в col */
+    }
+    .main-title {
+        font-size: 1.8rem;
+        text-align: left; /* Принудительно слева на мобильных */
+    }
+    header p {
+        text-align: left; /* Подзаголовок слева */
